@@ -8,94 +8,176 @@
 </head>
 
 <body>
-    <h1>Random math problem generator</h1>
-    <input type="submit" id="generate" value="Generate">
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Random math problem generator</h1>
+        <input type="submit" id="generate" value="Generate">
 
-    <div class="problem">
-        <span id="fNum"></span>
-        <span id="operator"></span>
-        <span id="sNum"></span>
+        <div class="problem">
+            <span id="fNum"></span>
+            <span id="operator"></span>
+            <span id="sNum"></span>
+        </div>
         <button id="checkBtn">Check</button>
-    </div>
-    <h1 id="correctText">Correct answer!</h1>
-    <h1 id="wrongText">Wrong answer!</h1>
-    <script>
-        const generateProb = () => {
-            let fNum = Math.floor(Math.random() * 100);
-            let sNum = Math.floor(Math.random() * 100);
-            let operator = Math.floor(Math.random() * 4);
-            let result = 0;
-
-            const fNumElement = document.getElementById("fNum");
-            const sNumElement = document.getElementById("sNum");
-            const operatorElement = document.getElementById("operator");
-
-            switch (operator) {
-                case 0:
-                    result = fNum + sNum;
-                    break;
-                case 1:
-                    result = fNum - sNum;
-                    break;
-                case 2:
-                    result = fNum * sNum;
-                    break;
-                case 3:
-                    result = fNum / sNum;
-                    break;
-            }
-
-            fNumElement.innerHTML = fNum;
-            sNumElement.innerHTML = sNum;
-            operatorElement.innerHTML = ["+", "-", "x", "÷"][operator];
-            return result;
+        <h1 id="correctText">Correct answer!</h1>
+        <h1 id="wrongText">Wrong answer!</h1>
+    </main>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            background-color: #a9a0ff;
         }
 
+        nav ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            height: 59px;
+        }
 
-        let correctText = document.getElementById("correctText");
-        let wrongText = document.getElementById("wrongText");
-        correctText.hidden = true;
-        wrongText.hidden = true;
-        let yourResultInputBox = document.createElement("input");
-        yourResultInputBox.setAttribute("type", "text");
-        yourResultInputBox.setAttribute("id", "yourResult");
-        document.body.appendChild(yourResultInputBox);
-        document.getElementById("checkBtn").hidden = true;
+        nav li {
+            list-style: none;
+            margin: 0 10px;
+
+        }
+
+        nav li a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #151414;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: larger;
+        }
+
+        main h1 {
+            text-align: center;
+            font-family: math;
+            font-size: 40px;
+            color: #fff;
+            margin-top: 34px;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        main input {
+            margin: 9px;
+            padding: 6px 12px;
+            font-size: large;
+            background: #333333;
+            color: antiquewhite;
+            border: 2px solid;
+            border-radius: 7px;
+        }
+
+        #checkBtn {
+            margin: 9px;
+            padding: 6px 12px;
+            font-size: large;
+            background: #333333;
+            color: antiquewhite;
+            border: 2px solid;
+            border-radius: 7px;
+        }
+    </style>
+</body>
+<script>
+    let main = document.querySelector("main");
+    const generateProb = () => {
+        let fNum = Math.floor(Math.random() * 100);
+        let sNum = Math.floor(Math.random() * 100);
+        let operator = Math.floor(Math.random() * 4);
         let result = 0;
-        document.getElementById("generate").onclick = function () {
+
+        const fNumElement = document.getElementById("fNum");
+        const sNumElement = document.getElementById("sNum");
+        const operatorElement = document.getElementById("operator");
+
+        switch (operator) {
+            case 0:
+                result = fNum + sNum;
+                break;
+            case 1:
+                result = fNum - sNum;
+                break;
+            case 2:
+                result = fNum * sNum;
+                break;
+            case 3:
+                result = fNum / sNum;
+                break;
+        }
+
+        fNumElement.innerHTML = fNum;
+        sNumElement.innerHTML = sNum;
+        operatorElement.innerHTML = ["+", "-", "x", "÷"][operator];
+        return result;
+    }
+
+
+    let correctText = document.getElementById("correctText");
+    let wrongText = document.getElementById("wrongText");
+    correctText.hidden = true;
+    wrongText.hidden = true;
+    let yourResultInputBox = document.createElement("input");
+    yourResultInputBox.setAttribute("type", "text");
+    yourResultInputBox.setAttribute("id", "yourResult");
+    main.appendChild(yourResultInputBox);
+    document.getElementById("checkBtn").hidden = true;
+    let result = 0;
+    document.getElementById("generate").onclick = function () {
+        document.getElementById("checkBtn").hidden = false;
+        document.getElementById("generate").value = "ReGenerate";
+        result = generateProb();
+    }
+    document.getElementById("checkBtn").onclick = function () {
+        if (document.getElementById("yourResult").value == result) {
+            correctText.hidden = false;
+            setTimeout(() => {
+                correctText.hidden = true;
+            }, 1000);
+            wrongText.hidden = true;
+            document.getElementById("yourResult").value = "";
             document.getElementById("checkBtn").hidden = false;
             result = generateProb();
+
+
+        } else if (document.getElementById("yourResult").value == "") {
+            alert("Please enter your answer");
         }
-        document.getElementById("checkBtn").onclick = function () {
-            if (document.getElementById("yourResult").value == result) {
-                correctText.hidden = false;
-                setTimeout(() => {
-                    correctText.hidden = true;
-                }, 1000);
+        else {
+            wrongText.hidden = false;
+            correctText.hidden = true;
+            console.log("Right answer: " + result);
+            let rAns = document.createElement("h1");
+            rAns.innerText = `Right answer: ${result}`;
+            document.body.appendChild(rAns);
+            setTimeout(() => {
+                document.body.removeChild(rAns);
+            }, 3000);
+            setTimeout(() => {
                 wrongText.hidden = true;
-                document.getElementById("yourResult").value = "";
-                document.getElementById("checkBtn").hidden = false;
-                result = generateProb();
-
-
-            } else {
-                wrongText.hidden = false;
-                correctText.hidden = true;
-                console.log("Right answer: " + result);
-                let rAns = document.createElement("h1");
-                rAns.innerText = `Right answer: ${result}`;
-                document.body.appendChild(rAns);
-                setTimeout(() => {
-                    document.body.removeChild(rAns);
-                }, 3000);
-                setTimeout(() => {
-                    wrongText.hidden = true;
-                }, 3000);
-                result = generateProb();
-                yourResultInputBox.value = "";
-            }
+            }, 3000);
+            result = generateProb();
+            yourResultInputBox.value = "";
         }
-    </script>
+    }
+</script>
+
 </body>
 
 </html>
